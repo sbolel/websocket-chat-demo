@@ -1,0 +1,38 @@
+name: Test
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    types: [opened, reopened, synchronize]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Set up Yarn
+      id: yarn-cache-dir-path
+      run: |
+        npm i -g yarn
+        yarn set version latest
+        yarn config set enableTelemetry 0
+        echo "::set-output name=dir::$(yarn cache dir)"
+    - name: Cache Yarn
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          **/node_modules
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Install Dependencies
+      run: yarn --frozen-lockfile
+    - name: Run Tests
+      run: yarn test

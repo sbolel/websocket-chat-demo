@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+/**
+ * @module ws
+ */
+const server = require('../index')
+
+server.listen(process.env.PORT || 8000)
+
+module.exports = server
