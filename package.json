@@ -70,7 +70,7 @@
     "@babel/register": "^7.10.4",
     "chalk": "^4.1.0",
     "node-static": "^0.7.11",
-    "ws": "^7.3.1"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
