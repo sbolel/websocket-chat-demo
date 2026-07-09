@@ -11,7 +11,10 @@ beforeAll(() => {
 
 afterAll((done) => {
   wss.close()
-  return server && server.close(done)
+  if (server && server.listening) {
+    return server.close(done)
+  }
+  return done()
 })
 
 describe('WebSocket Server', () => {
